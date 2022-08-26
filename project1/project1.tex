@@ -1,0 +1,109 @@
+\documentclass{article}
+
+\usepackage[margin=2cm]{geometry}
+\usepackage{physics, amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{CJKutf8}
+\usepackage{parskip}
+\usepackage{minted}
+\usepackage{esint}
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,
+	urlcolor=cyan,
+	pdftitle={Overleaf Example},
+	pdfpagemode=FullScreen,
+}
+
+\begin{document}
+
+\begin{CJK}{UTF8}{song}
+\author{わたし}
+\title{Project 1}
+\date{\today}
+\maketitle
+\end{CJK}
+
+\newcommand{\dunder}[1]{
+	\underline{\underline{#1}}
+}
+
+\newcommand{\bracify}[1]{
+	\begin{bmatrix}#1\end{bmatrix}
+}
+
+\newcommand{\bhat}[1]{
+	\hat{\boldsymbol{#1}}
+}
+
+\newcommand{\avg}[1]{
+	\left<#1\right>
+}
+
+\newcommand{\nroot}[2][2]{
+	\sqrt[\uproot{2}\scriptstyle #1]{#2}
+}
+
+\newcommand{\navsection}[1]{
+	\section*{#1}
+	\addcontentsline{toc}{section}{#1}
+}
+\newcommand{\navsubsection}[1]{
+	\subsection*{#1}
+	\addcontentsline{toc}{subsection}{#1}
+}
+\newcommand{\navsubsubsection}[1]{
+	\subsubsection*{#1}
+	\addcontentsline{toc}{subsubsection}{#1}
+}
+
+\navsection{Introduction}
+
+The one-dimensional Poisson equation can be written as
+$$
+	-\pdv[2]{u}{x} = f(x)
+$$
+We will use the function $f(x) = 100e^{-10x}$, with $x \in [0, 1]$ and the boundry conditions $u(0) = u(1) = 0$.
+
+\navsection{Problem 1}
+We start by finding the analythic solution to the equation:
+\begin{align*}
+	-\pdv[2]{u}{x} = f(x) \implies u(x) &= -\iint f(x) \dd{x}^2 \\
+	&= -\iint 100e^{-10x} \dd{x}^2 \\
+	&= \int 10e^{-10x} + C_1 \dd{x} \\
+	&= -e^{-10x} + C_1x + C_2 \\
+	u(0) = -1 + C_2 = 0 &\implies C_2 = 1 \\
+	u(1) = -e^{-10} + C_1 + 1 = 0 &\implies C_1 = e^{-10} - 1 \\
+\end{align*}
+This gives $u(x) = dunder{1 - (1 - e^{-10})x - e^{-10x}}$
+
+\navsection{Problem 2}
+
+\navsection{Problem 3}
+
+We want to discretize the one-dimensional Poisson equation.
+We start by discretizing the second order derivative.
+We will use the definition of the derivative,
+$$\dv{f}{x} = \lim_{\Delta x \rightarrow \infty} \frac{f(x + \Delta x) - f(x)}{\Delta x} = \lim_{\Delta x \rightarrow \infty} \frac{f(x) - f(x - \Delta x)}{\Delta x}$$
+This means that $\dv{f}{x} \approx \frac{f(x + \Delta x) - f(x)}{\Delta x} \approx \frac{f(x) - f(x - \Delta x)}{\Delta x}$, where a
+smaller $\Delta x$ gives a better approximation. We can then approximate the second order derivative:
+\begin{align*}
+	\dv[2]{f}{x} &\approx \frac{\frac{f(x + \Delta x) - f(x)}{\Delta x} - \frac{f(x) - f(x - \Delta x)}{\Delta x}}{\Delta x} \\
+	&= \frac{f(x + \Delta x) - 2f(x) + f(x - \Delta x)}{\Delta x^2} \\
+\end{align*}
+
+We can then discretize the one-dimensional Poisson equation.
+\begin{align*}
+	-\pdv[2]{u}{x} &= f(x) \\
+	-\frac{v(x + \Delta x) - 2v(x) + v(x - \Delta x)}{\Delta x^2} &= f(x) \\
+	v(x + \Delta x) &= 2v(x) - v(x - \Delta x) - f(x)\Delta x^2 \\
+\end{align*}
+Note that we have here distinguished the discretized approximation from the actual exact answer by
+calling the approximation $v(x)$ and the exact solution $u(x)$. 
+
+\end{document}
