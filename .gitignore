@@ -1,6 +1,9 @@
 \.vscode
 _minted-project[0-9]
+
 project[0-9].*
+project[0-9]/problem[0-9]/p[0-9]
+
 *.dat
 *.png
-project[0-9]/problem[0-9]/p[0-9]
+*.stamp
