@@ -52,19 +52,19 @@ int main()
 
     for (auto &n : n_vec)
     {
-        n = n + 2;
+        size_t N = n + 2;
         std::cout << "n=" << n << std::endl;
 
-        auto xn_vec = linspace(0, 1, n);
+        auto xn_vec = linspace(0, 1, N);
         std::vector<double> vn_vec;
-        vn_vec.resize(n - 2);
+        vn_vec.resize(n);
 
         use_general_algorithm(xn_vec, vn_vec);
 
         Timer timer{};
-        for (size_t i = 1; i < n - 1; i++)
+        for (size_t i = 0; i < n; i++)
         {
-            outfile << xn_vec[i] << " " << vn_vec[i - 1] << std::endl;
+            outfile << xn_vec[i+1] << " " << vn_vec[i] << std::endl;
         }
         outfile << " --- " << std::endl;
         std::cout << "  saving to file: " << timer.get_pretty() << std::endl;
