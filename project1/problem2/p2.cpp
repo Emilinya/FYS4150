@@ -4,22 +4,13 @@
 #include <vector>
 #include <math.h>
 
-std::vector<double> linspace(double a, double b, size_t n) {
-    std::vector<double> vec;
-    vec.reserve(n);
-    for (size_t i = 0; i < n; i++)
-    {
-        double p = (double) i / (double) (n-1);
-        vec.push_back(a + p * (b - a));
-    }
-    return vec;
-}
+#include "../../cpp_utils/utils.hh"
 
 double u(double x) {
     return 1 - (1 - exp(-10))*x - exp(-10*x);
 }
 
-int main(int argc, char const *argv[])
+int main()
 {
     size_t n = 1000;
     std::vector<double> x_vec = linspace(0, 1, n);
@@ -33,7 +24,7 @@ int main(int argc, char const *argv[])
 
 
     std::ofstream outfile;
-    outfile.open("data.dat");
+    outfile.open("problem2/data.dat");
     for (size_t i = 0; i < n; i++)
     {
         outfile << x_vec[i] << " " << u_vec[i] << std::endl;
