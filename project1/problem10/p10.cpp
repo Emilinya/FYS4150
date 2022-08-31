@@ -55,7 +55,7 @@ int main()
     {
         N_vals.push_back(pow(10, i));
     }
-    
+
     std::vector<double> general_ms;
     std::vector<double> special_ms;
 
@@ -81,7 +81,7 @@ int main()
             run_general(xn_vec, vn_vec);
         }
         general_ms.push_back(timer.get_ms() / (double)iters);
-        
+
         for (size_t i = 0; i < prewarm; i++)
         {
             run_special(xn_vec, vn_vec);
@@ -94,7 +94,6 @@ int main()
         }
         special_ms.push_back(timer.get_ms() / (double)iters);
     }
-
 
     std::ofstream outfile;
     outfile.open("problem10/data.dat");

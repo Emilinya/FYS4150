@@ -6,22 +6,16 @@
 
 #include "../../cpp_utils/utils.hh"
 
-double u(double x) {
-    return 1 - (1 - exp(-10))*x - exp(-10*x);
+double u(double x)
+{
+    return 1 - (1 - exp(-10)) * x - exp(-10 * x);
 }
 
 int main()
 {
     size_t n = 1000;
-    std::vector<double> x_vec = linspace(0, 1, n);
-
-    std::vector<double> u_vec;
-    u_vec.reserve(n);
-    for (size_t i = 0; i < n; i++)
-    {
-        u_vec.push_back(u(x_vec[i]));
-    }
-
+    auto x_vec = linspace(0, 1, n);
+    auto u_vec = from_func(x_vec, u);
 
     std::ofstream outfile;
     outfile.open("problem2/data.dat");
