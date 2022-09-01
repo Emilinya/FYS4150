@@ -21,20 +21,23 @@ with open("problem7/data.dat", "r") as datafile:
             y_ray = []
 
 for x_ray, y_ray in zip(x_rays, y_rays):
-    abs_log_err = np.log10(np.abs(u(x_ray) - y_ray))
-    plt.plot(x_ray, abs_log_err, label=f"n={len(x_ray)}")
+    abs_err = np.abs(u(x_ray) - y_ray)
+    plt.plot(x_ray, abs_err, label=f"n={len(x_ray)}")
 plt.legend()
 plt.xlabel("x []")
-plt.ylabel("log(y) []")
+plt.ylabel("y []")
+plt.yscale('log')
 plt.title("Absolute error of numeric solution")
 plt.savefig("p8_abs.png", dpi=200)
 plt.clf()
 
 for x_ray, y_ray in zip(x_rays, y_rays):
-    abs_log_err = np.log10(np.abs(u(x_ray) - y_ray)/np.abs(u(x_ray)))
-    plt.plot(x_ray, abs_log_err, label=f"n={len(x_ray)}")
+    rel_err = np.abs(u(x_ray) - y_ray)/np.abs(u(x_ray))
+    plt.plot(x_ray, rel_err, label=f"n={len(x_ray)}")
 plt.legend()
 plt.xlabel("x []")
-plt.ylabel("log(y) []")
+plt.ylabel("y []")
+plt.yscale('log')
 plt.title("Relative error of numeric solution")
 plt.savefig("p8_rel.png", dpi=200)
+plt.clf()
