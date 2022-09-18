@@ -5,6 +5,7 @@ void profileJacobiEigensolverSparse()
 {
     std::ofstream outfile;
     outfile.open("problem5/data_sparce.dat");
+    outfile.precision(14);
     for (size_t n = 3; n < 100; n++)
     {
         std::cout << "\r" << n + 1 << "/" << 100;
@@ -22,6 +23,7 @@ void profileJacobiEigensolverDense()
 {
     std::ofstream outfile;
     outfile.open("problem5/data_dense.dat");
+    outfile.precision(14);
     for (size_t n = 3; n < 100; n++)
     {
         std::cout << "\r" << n + 1 << "/" << 100;

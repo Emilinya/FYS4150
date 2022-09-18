@@ -10,10 +10,15 @@ void saveDiscretization(size_t n)
     assert(result.didConverge);
 
     std::ofstream outfile;
+    outfile.precision(14);
     outfile.open(string_format("problem6/data_%d.dat", n));
     for (size_t i = 0; i < 3; i++)
     {
-        outfile << result.eigenValues(i) << result.eigenVectors.col(i).t();
+        outfile << result.eigenValues(i);
+        for (size_t j = 0; j < n-1; j++) {
+            outfile << " " << result.eigenVectors(j, i);
+        }
+        outfile << std::endl;
     }
     outfile.close();
 }
