@@ -64,6 +64,37 @@ std::string string_format(const std::string &format, Args... args)
     return std::string(buf.get(), buf.get() + size - 1);
 }
 
+std::string prettify_ms(double ms) {
+    if (ms > 1000.)
+    {
+        int s = static_cast<int>(ms / 1000.);
+        if (s > 60.)
+        {
+            // TODO: Implement this properly
+            int m = static_cast<int>(s / 60.);
+            ms -= 1000. * s;
+            s -= m * 60;
+            return string_format("%d m %d s %.0f ms", m, s, ms);
+        }
+        else
+        {
+            ms -= 1000. * s;
+            if (ms == 0)
+            {
+                return string_format("%d s", s);
+            }
+            else
+            {
+                return string_format("%d s %.0f ms", s, ms);
+            }
+        }
+    }
+    else
+    {
+        return string_format("%.3g ms", ms);
+    }
+}
+
 class Timer
 {
     // This is a timer class to simplify timing (especially removing all those long type declarations)
@@ -94,36 +125,7 @@ double Timer::get_ms()
 std::string Timer::get_pretty()
 {
     // Get elapsed time as a nice, formatted string
-    double ms = Timer::get_ms();
-
-    if (ms > 1000.)
-    {
-        int s = static_cast<int>(ms / 1000.);
-        if (s > 60.)
-        {
-            // TODO: Implement this properly
-            int m = static_cast<int>(s / 60.);
-            s -= m * 60;
-            ms -= 1000. * s;
-            return string_format("%d m %d s %.0f ms", m, s, ms);
-        }
-        else
-        {
-            ms -= 1000. * s;
-            if (ms == 0)
-            {
-                return string_format("%d s", s);
-            }
-            else
-            {
-                return string_format("%d s %.0f ms", s, ms);
-            }
-        }
-    }
-    else
-    {
-        return string_format("%.3g ms", ms);
-    }
+    return prettify_ms(Timer::get_ms());
 }
 
 void Timer::restart()
