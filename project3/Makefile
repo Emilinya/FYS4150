@@ -12,7 +12,7 @@ p5_cpp: problem5/.p5_cpp.stamp
 problem5/.p5_cpp.stamp: ./problem5/p5
 	./problem5/p5;
 	touch $@
-problem5/p5: problem5/p5.cpp ../cpp_utils/utils.hh project3Utils.hh
+problem5/p5: problem5/p5.cpp ../cpp_utils/utils.hh project3Utils.hh problem5/Particle.hh
 	g++ -Wall -Wextra -std=c++17  -o $@ $< -larmadillo
 
 
@@ -25,7 +25,7 @@ p6_cpp: problem6/.p6_cpp.stamp
 problem6/.p6_cpp.stamp: ./problem6/p6
 	./problem6/p6;
 	touch $@
-problem6/p6: problem6/p6.cpp ../cpp_utils/utils.hh project3Utils.hh problem5/Particle.hh
+problem6/p6: problem6/p6.cpp ../cpp_utils/utils.hh project3Utils.hh problem5/Particle.hh problem6/PenningTrap.hh
 	g++ -Wall -Wextra -std=c++17  -o $@ $< -larmadillo
 
 

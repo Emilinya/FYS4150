@@ -4,12 +4,12 @@ problem_dict = {
     5: ("cpp", {
         "plot": False,
         "largs": "-larmadillo",
-        "depends": ["project3Utils"]
+        "depends": ["project3Utils", "problem5/Particle"]
     }),
     6: ("cpp", {
         "plot": False,
         "largs": "-larmadillo",
-        "depends": ["project3Utils", "problem5/Particle"]
+        "depends": ["project3Utils", "problem5/Particle", "problem6/PenningTrap"]
     }),
     7: ("cpp", {
         "plot": True,
