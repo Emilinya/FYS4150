@@ -1,3 +1,4 @@
+#include "../../cpp_utils/utils.hh"
 #include "integrator.hh"
 
 double u(double t)
@@ -13,14 +14,21 @@ Vec1 dudt(double t, Vec1 &u)
 
 int main()
 {
-    Integrator<1> integrator(dudt, Integrator<1>::Type::RK4);
-    Vec1 u0{1};
+    Integrator<1> integrator(dudt, IntegratorType::RK4);
 
-    auto [tRay, uRay] = integrator.integrate(0, 1, {1}, 10);
+    auto [tRay, uRayRK4] = integrator.integrate(0, 1, {1}, 10);
+    integrator.setType(IntegratorType::FORWARD_EULER);
+    auto [_, uRayEuler] = integrator.integrate(0, 1, {1}, 10);
+
+    std::ofstream outfile;
+    outfile.precision(14);
+    outfile.open("problem7/data.dat");
+
     for (size_t i = 0; i < tRay.size(); i++)
     {
-        std::cout << tRay[i] << ": " << uRay[i](0) << std::endl;
+        outfile << tRay[i] << " " << u(tRay[i]) << " " << uRayRK4[i](0) << " " << uRayEuler[i](0) << std::endl;
     }
+    outfile.close();
 
     return 0;
 }
