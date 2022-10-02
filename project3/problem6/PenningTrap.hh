@@ -3,13 +3,14 @@
 #include <armadillo>
 #include "../problem5/Particle.hh"
 
+template <uint N>
 class PenningTrap
 {
 public:
-    PenningTrap(double B0, double V0, double d, std::vector<Particle> particles)
+    PenningTrap(double B0, double V0, double d, std::array<Particle, N> particles)
         : B0(B0), V0(V0), d(d), particles(particles) {}
 
-    PenningTrap(std::vector<Particle> particles)
+    PenningTrap(std::array<Particle, N> particles)
         : B0(9.65), V0(9.65e8), d(1e4), particles(particles) {}
 
     Vec3 getExternalElectricField(Vec3 pos) {
@@ -28,5 +29,5 @@ public:
     const double B0;
     double V0;
     double d;
-    std::vector<Particle> particles;
+    std::array<Particle, N> particles;
 };
