@@ -25,7 +25,7 @@ problem_dict = {
     }),
     9: ("cpp", {
         "plot": True,
-        "cargs": "-fsanitize=address -fopenmp -O3",
+        "cargs": "-fopenmp -O3",
         "largs": "-larmadillo",
         "depends": ["project3Utils", "problem5/Particle", "problem6/PenningTrap", "problem7/integrator"],
         "datafiles": ["problem9/data_f0.1.dat"]

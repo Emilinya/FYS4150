@@ -83,7 +83,7 @@ problem9/.p9_cpp.stamp: ./problem9/p9
 	./problem9/p9;
 	touch $@
 problem9/p9: problem9/p9.cpp ../cpp_utils/utils.hpp project3Utils.hpp problem5/Particle.hpp problem6/PenningTrap.hpp problem7/integrator.hpp
-	g++ -Wall -Wextra -std=c++17 -fsanitize=address -fopenmp -O3 -o $@ $< -larmadillo
+	g++ -Wall -Wextra -std=c++17 -fopenmp -O3 -o $@ $< -larmadillo
 
 
 .PHONY: p9_py
