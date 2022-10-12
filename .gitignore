@@ -1,7 +1,9 @@
 \.vscode
 _minted-project[0-9]
+__pycache__
 
 project[0-9].*
+project[0-9]notes.*
 project[0-9]/problem[0-9]/p[0-9]
 project[0-9]/problem1[0-9]/p1[0-9]
 

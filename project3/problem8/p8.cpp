@@ -68,9 +68,7 @@ void doubleMovement()
     PenningTrapIntegrator<2> integrator(trap, IntegratorType::RK4);
 
     Timer timer;
-    auto pair = integrator.integrate(50, 10000);
-    auto tVals = pair.first;
-    auto trapStates = pair.second;
+    auto [tVals, trapStates] = integrator.integrate(50, 10000);
     std::cout << timer.get_pretty() << std::endl;
     saveTrapStates<2>(tVals, trapStates, "problem8/data_double_movement_interactions.dat");
 
@@ -78,9 +76,7 @@ void doubleMovement()
     trap.particles_ = {Particles::p1, Particles::p2};
 
     timer.restart();
-    auto newPair = integrator.integrate(50, 10000);
-    auto newTVals = newPair.first;
-    auto newTrapStates = newPair.second;
+    auto [newTVals, newTrapStates] = integrator.integrate(50, 10000);
     std::cout << timer.get_pretty() << std::endl;
     saveTrapStates<2>(newTVals, newTrapStates, "problem8/data_double_movement_no_interactions.dat");
 }
