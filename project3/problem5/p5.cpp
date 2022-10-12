@@ -1,8 +1,8 @@
-#include "Particle.hh"
+#include "Particle.hpp"
 
 int main()
 {
-    Particle particle(0.4, 1.1, {1, 2, 3}, {-1, -1, -1});
+    Particle particle{0.4, 1.1, {1, 2, 3}, {-1, -1, -1}};
     
     std::cout << "pos + vel:" << std::endl;
     std::cout << particle.position + particle.velocity;

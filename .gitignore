@@ -7,4 +7,5 @@ project[0-9]/problem1[0-9]/p1[0-9]
 
 *.dat
 *.png
+*.svg
 *.stamp

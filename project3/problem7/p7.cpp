@@ -1,5 +1,5 @@
-#include "../../cpp_utils/utils.hh"
-#include "integrator.hh"
+#include "../../cpp_utils/utils.hpp"
+#include "integrator.hpp"
 
 double u(double t)
 {

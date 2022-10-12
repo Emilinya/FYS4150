@@ -12,7 +12,7 @@ p5_cpp: problem5/.p5_cpp.stamp
 problem5/.p5_cpp.stamp: ./problem5/p5
 	./problem5/p5;
 	touch $@
-problem5/p5: problem5/p5.cpp ../cpp_utils/utils.hh project3Utils.hh problem5/Particle.hh
+problem5/p5: problem5/p5.cpp ../cpp_utils/utils.hpp project3Utils.hpp problem5/Particle.hpp
 	g++ -Wall -Wextra -std=c++17  -o $@ $< -larmadillo
 
 
@@ -25,7 +25,7 @@ p6_cpp: problem6/.p6_cpp.stamp
 problem6/.p6_cpp.stamp: ./problem6/p6
 	./problem6/p6;
 	touch $@
-problem6/p6: problem6/p6.cpp ../cpp_utils/utils.hh project3Utils.hh problem5/Particle.hh problem6/PenningTrap.hh
+problem6/p6: problem6/p6.cpp ../cpp_utils/utils.hpp project3Utils.hpp problem5/Particle.hpp problem6/PenningTrap.hpp
 	g++ -Wall -Wextra -std=c++17  -o $@ $< -larmadillo
 
 
@@ -38,16 +38,16 @@ p7_cpp: problem7/.p7_cpp.stamp
 problem7/.p7_cpp.stamp: ./problem7/p7
 	./problem7/p7;
 	touch $@
-problem7/p7: problem7/p7.cpp ../cpp_utils/utils.hh project3Utils.hh problem5/Particle.hh problem6/PenningTrap.hh problem7/integrator.hh
+problem7/p7: problem7/p7.cpp ../cpp_utils/utils.hpp project3Utils.hpp problem5/Particle.hpp problem6/PenningTrap.hpp problem7/integrator.hpp
 	g++ -Wall -Wextra -std=c++17  -o $@ $< -larmadillo
 
 
 .PHONY: p7_py
 p7_py: problem7/.p7_py.stamp
 
-problem7/.p7_py.stamp: p7.png
+problem7/.p7_py.stamp: imgs/p7.svg
 	touch $@
-p7.png: problem7/p7.py problem7/data.dat
+imgs/p7.svg: problem7/p7.py problem7/data.dat
 	python3 problem7/p7.py
 
 
@@ -60,21 +60,21 @@ p8_cpp: problem8/.p8_cpp.stamp
 problem8/.p8_cpp.stamp: ./problem8/p8
 	./problem8/p8;
 	touch $@
-problem8/p8: problem8/p8.cpp ../cpp_utils/utils.hh problem5/Particle.hh problem6/PenningTrap.hh
-	g++ -Wall -Wextra -std=c++17  -o $@ $< -larmadillo
+problem8/p8: problem8/p8.cpp ../cpp_utils/utils.hpp project3Utils.hpp problem5/Particle.hpp problem6/PenningTrap.hpp problem7/integrator.hpp
+	g++ -Wall -Wextra -std=c++17 -O3 -o $@ $< -larmadillo
 
 
 .PHONY: p8_py
 p8_py: problem8/.p8_py.stamp
 
-problem8/.p8_py.stamp: project3Utils
+problem8/.p8_py.stamp: imgs/p8_single_movement.svg
 	touch $@
-project3Utils: problem8/p8.py project3Utils problem8/data_single_movement.dat problem8/data_double_movement.dat
+imgs/p8_single_movement.svg: problem8/p8.py problem8/data_single_movement.dat
 	python3 problem8/p8.py
 
 
 .PHONY: p9
-p9: p9_cpp
+p9: p9_cpp p9_py
 
 .PHONY: p9_cpp
 p9_cpp: problem9/.p9_cpp.stamp
@@ -82,6 +82,15 @@ p9_cpp: problem9/.p9_cpp.stamp
 problem9/.p9_cpp.stamp: ./problem9/p9
 	./problem9/p9;
 	touch $@
-problem9/p9: problem9/p9.cpp ../cpp_utils/utils.hh 
-	g++ -Wall -Wextra -std=c++17  -o $@ $< -larmadillo
+problem9/p9: problem9/p9.cpp ../cpp_utils/utils.hpp project3Utils.hpp problem5/Particle.hpp problem6/PenningTrap.hpp problem7/integrator.hpp
+	g++ -Wall -Wextra -std=c++17 -fsanitize=address -fopenmp -O3 -o $@ $< -larmadillo
+
+
+.PHONY: p9_py
+p9_py: problem9/.p9_py.stamp
+
+problem9/.p9_py.stamp: imgs/p9_f0.1.svg
+	touch $@
+imgs/p9_f0.1.svg: problem9/p9.py problem9/data_f0.1.dat
+	python3 problem9/p9.py
 

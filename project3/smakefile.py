@@ -18,13 +18,17 @@ problem_dict = {
     }),
     8: ("cpp", {
         "plot": True,
+        "cargs": "-O3",
         "largs": "-larmadillo",
-        "depends": ["problem5/Particle", "problem6/PenningTrap"],
-        "datafiles": ["project3Utils", "problem8/data_single_movement.dat", "problem8/data_double_movement.dat"]
+        "depends": ["project3Utils", "problem5/Particle", "problem6/PenningTrap", "problem7/integrator"],
+        "datafiles": ["problem8/data_single_movement.dat"]
     }),
     9: ("cpp", {
-        "plot": False,
+        "plot": True,
+        "cargs": "-fsanitize=address -fopenmp -O3",
         "largs": "-larmadillo",
+        "depends": ["project3Utils", "problem5/Particle", "problem6/PenningTrap", "problem7/integrator"],
+        "datafiles": ["problem9/data_f0.1.dat"]
     }),
 }
 
@@ -37,14 +41,14 @@ p{i}_cpp: problem{i}/.p{i}_cpp.stamp
 problem{i}/.p{i}_cpp.stamp: ./problem{i}/p{i}
 \t./problem{i}/p{i};
 \ttouch $@
-problem{i}/p{i}: problem{i}/p{i}.cpp ../cpp_utils/utils.hh {' '.join([dep + '.hh' for dep in deps])}
+problem{i}/p{i}: problem{i}/p{i}.cpp ../cpp_utils/utils.hpp {' '.join([dep + '.hpp' for dep in deps])}
 \tg++ -Wall -Wextra -std=c++17 {cargs} -o $@ $< {largs}
 """
 
 
 def py_string(i, datafiles):
     imgName = datafiles[0].split(
-        "/")[-1].replace("data", f"p{i}").replace(".dat", ".png")
+        "/")[-1].replace("data", f"imgs/p{i}").replace(".dat", ".svg")
     return f"""
 .PHONY: p{i}_py
 p{i}_py: problem{i}/.p{i}_py.stamp

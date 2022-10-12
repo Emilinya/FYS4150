@@ -1,11 +1,12 @@
-#include "PenningTrap.hh"
+#include "PenningTrap.hpp"
 
 int main()
 {
-    PenningTrap<0> trap({});
+    Particle particle{.position={1, 1, 1}, .velocity={0, 0, 0}};
+    PenningTrap<1> trap({particle});
     
     std::cout << "external electric field:" << std::endl;
-    std::cout << trap.getExternalElectricField({1, 1, 1}) << std::endl;
+    std::cout << trap.getExtE(trap.particles_[0].position, 0) << std::endl;
 
     return 0;
 }
