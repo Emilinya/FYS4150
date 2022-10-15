@@ -15,21 +15,6 @@ public:
     PenningTrap(std::array<Particle, N> particles)
         : B0_(9.65e1), V0_(2.41e6), d_(500), f_(0), wV_(0), particles_(particles) {}
 
-    // initialize penning trap with particles with normal distributed positions and velocities
-    // uses Calsium ions and default penning trap properties
-    static PenningTrap<N> withRandomParticles() {
-        double d = 500;
-        std::array<Particle, N> particles;
-        for (size_t i = 0; i < N; i++)
-        {
-            particles[i] = {
-                .position = arma::vec(3).randn() * 0.1 * d,
-                .velocity = arma::vec(3).randn() * 0.1 * d,
-            };
-        }
-        return PenningTrap<N>{particles};
-    }
-
     void disableInteractions()
     {
         doInteractions_ = false;

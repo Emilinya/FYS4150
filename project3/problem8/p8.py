@@ -84,7 +84,7 @@ def plot_double_xy(interactions):
         f"problem8/data_double_movement_{interStr}.dat"
     ).T
 
-    limits = 60
+    limits = 80
 
     _, ax = plt.subplots(tight_layout=True, figsize=(6, 6))
 
@@ -168,7 +168,7 @@ def plot_double_3d(interactions):
     t_ray, x1_ray, y1_ray, z1_ray, _, _, _, x2_ray, y2_ray, z2_ray, * \
         _ = np.loadtxt(f"problem8/data_double_movement_{interStr}.dat").T
 
-    limits = 60
+    limits = 80
 
     fig = plt.figure(tight_layout=True)
     ax = fig.add_subplot(projection='3d')
