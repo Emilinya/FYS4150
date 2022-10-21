@@ -20,9 +20,9 @@ def plot_single_z():
     ).T
 
     plt.figure(tight_layout=True)
-    plt.plot(t_ray, r0[2]*np.cos(wz*t_ray), "k", label="analytical solution")
+    plt.plot(t_ray, r0[2]*np.cos(wz*t_ray), "r", label="analytical solution")
     # skip values to avoid dots looking like a full line
-    plt.plot(t_ray[::10], z_ray[::10], ".", label="numerical solution")
+    plt.plot(t_ray[::20], z_ray[::20], ".g", label="numerical solution")
     plt.legend()
     plt.title(f"One ion, $r_0={r0}, v_0={v0}$")
     plt.xlabel("$t$ [$\\mu s$]")
@@ -248,7 +248,7 @@ def plot_error():
         r_err = (sum(sumTerm(k) for k in range(1, 4)))/3
         
         plt.xlabel("$t$ [$\\mu s$]")
-        plt.ylabel("relative error []")
+        plt.ylabel("relative error [%]")
         plt.title(f"One ion, relative error with {'RK4' if name=='rk4' else 'Euler'}, $r_{{err}}={r_err:.5f}$")
         plt.legend()
         plt.yscale('log')
