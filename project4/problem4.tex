@@ -1,0 +1,177 @@
+\documentclass[english,notitlepage,reprint,nofootinbib]{revtex4-2}
+
+\usepackage[noend]{algpseudocode}
+\usepackage[margin=2cm]{geometry}
+\usepackage{physics, amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{subcaption}
+\usepackage{algorithm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{minted}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{tikz}
+\usepackage{svg}
+
+\usetikzlibrary{quantikz}
+
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+
+\begin{document}
+
+\title{The Ising model}
+\author{Emilie Dørum}
+\date{\today}
+\noaffiliation
+
+\begin{abstract}
+\end{abstract}
+\maketitle
+
+\newcommand{\dunder}[1] {
+	\underline{\underline{#1}} 
+}
+
+\newcommand{\mat}[1] {
+	\begin{bmatrix}#1\end{bmatrix}
+}
+
+\newcommand{\bs}[1] {
+	\boldsymbol{#1}
+}
+
+\newcommand{\bhat}[1] {
+	\hat{\boldsymbol{#1}}
+}
+
+\newcommand{\vary}[1] {
+	\text{Var}\left[#1\right]
+}
+
+\newcommand{\expy}[1] {
+	\mathbb{E}\left[#1\right]
+}
+
+\newcommand{\avg}[1] {
+	\left<#1\right>
+}
+
+\section{Introduction}
+
+\section{Methods}
+
+\subsection{Implementation}
+
+\section{Results}
+
+\section{Discussion}
+
+\section{Conclusion}
+
+\onecolumngrid
+
+\section*{References}
+\begin{thebibliography}{}
+\end{thebibliography}
+
+\clearpage
+
+\twocolumngrid
+
+\appendix
+
+\section{Code}
+
+The code used to make the figures in this paper can be found on GitHub at \\
+\href{https://github.com/Emilinya/FYS4150/tree/main/project3}
+{https://github.com/Emilinya/FYS4150/tree/main/project3}
+
+\section{Analytical solution}\label{anasol}
+Assume a $2 \times 2$ lattice with periodic boundary conditions. This lattice has 16 possible spin states, and looks like
+\begin{center}
+    \begin{tabular}{c|c}
+        $s_1$ & $s_2$ \\
+        \hline
+        $s_3$ & $s_4$ \\
+    \end{tabular}
+\end{center} 
+
+We can compute the sum over all neighboring pairs of spins without double-counting
+$$
+    \sum_{\avg{kl}}^4 s_ks_l = s_1s_2 + s_1s_3 + s_2s_4 + s_3s_4 = (s_1 + s_4)(s_2 + s_3)
+$$
+
+We first want to summarize all possible states of the system:
+\begin{center}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        \# positive spins & E & M & Degeneracy \\
+        \hline
+        4 & $-4J$ & 4 & 1 \\
+        3 & 0 & 2 & 4 \\
+        2 & 0 & 0 & 4 \\
+        2 & $4J$ & 0 & 2 \\
+        1 & 0 & -2 & 4 \\
+        0 & $-4J$ & -4 & 1 \\
+        \hline
+    \end{tabular}
+\end{center}
+
+We then want to calculate important quantities:
+\begin{align*}
+    Z &= \sum_s e^{-\beta E(s)}  \\
+    &= 2e^{4\beta J} + 2e^{-4\beta J} + 12 \\
+    &= 4(\cosh(4\beta J) + 3) \\
+    \avg{E} &= \frac{2e^{4\beta J}(-4J) + 2e^{-4\beta J}(4J)}{4(\cosh(4\beta J) + 3)} \\
+    &= J\frac{2\qty(e^{-4\beta J} - e^{4\beta J})}{\cosh(4\beta J) + 3} \\
+    &= J\frac{4\sinh(-4\beta J)}{\cosh(4\beta J) + 3} \\
+    \implies \avg{\epsilon} &= \frac{J}{N}\frac{4\sinh(-4\beta J)}{\cosh(4\beta J) + 3} \\
+    \avg{E^2} &= \frac{2e^{4\beta J}(-4J)^2 + 2e^{-4\beta J}(4J)^2}{4(\cosh(4\beta J) + 3)} \\
+    &= J^2\frac{8\qty(e^{4\beta J} + e^{-4\beta J})}{\cosh(4\beta J) + 3} \\
+    &= J^2\frac{16\cosh(4\beta J)}{\cosh(4\beta J) + 3} \\
+    \implies \avg{\epsilon^2} &= \frac{J^2}{N^2}\frac{16\cosh(4\beta J)}{\cosh(4\beta J) + 3} \\
+    \avg{|M|} &= \frac{e^{4\beta J}4 + 4\cdot 2 + 4 |-2| + e^{4\beta J}|-4|}{4(\cosh(4\beta J) + 3)} \\
+    &= 2\frac{e^{4\beta J} + 2}{\cosh(4\beta J) + 3} \\
+    \implies \avg{|m|} &= \frac{2}{N}\frac{e^{4\beta J} + 2}{\cosh(4\beta J) + 3} \\
+    \avg{M^2} &= \frac{e^{4\beta J}4^2 + 4\cdot 2^2 + 4 (-2)^2 + e^{4\beta J}(-4)^2}{4(\cosh(4\beta J) + 3)} \\
+    &= 8\frac{e^{4\beta J} + 1}{\cosh(4\beta J) + 3} \\
+    \implies \avg{m^2} &= \frac{8}{N^2}\frac{e^{4\beta J} + 1}{\cosh(4\beta J) + 3} \\
+\end{align*}
+\begin{align*}
+    C_V &= \frac{1}{N} \frac{1}{k_B T^2}\qty(\avg{E^2} - \avg{E}^2) \\
+    &= \frac{1}{N} \frac{1}{k_B T^2}\qty(J^2\frac{16\cosh(4\beta J)}{\cosh(4\beta J) + 3} - \qty(J\frac{4\sinh(-4\beta J)}{\cosh(4\beta J) + 3})^2) \\
+    &= \frac{1}{N} \frac{16J^2}{k_B T^2}\frac{\cosh[2](4\beta J) + 3\cosh(4\beta J) - \sinh[2](4\beta J)}{(\cosh(4\beta J) + 3)^2} \\
+    &= \frac{1}{N} \frac{16J^2}{k_B T^2}\frac{1 + 3 \cosh(4\beta J)}{(3 + \cosh(4\beta J))^2} \\
+    \chi &= \frac{1}{N} \frac{1}{k_B T}(\avg{M^2} - \avg{|M|}^2) \\
+    &= \frac{1}{N} \frac{1}{k_B T}\qty(8\frac{e^{4\beta J} + 1}{\cosh(4\beta J) + 3} - \qty(2\frac{e^{4\beta J} + 2}{\cosh(4\beta J) + 3})^2) \\
+    &= \frac{1}{N} \frac{4}{k_B T}\qty(2\frac{e^{4\beta J} + 1}{\cosh(4\beta J) + 3} - \frac{\qty(e^{4\beta J} + 2)^2}{\qty(\cosh(4\beta J) + 3)^2}) \\
+    &= \frac{1}{N} \frac{4}{k_B T} \frac{3e^{4\beta J} + e^{-4\beta J} + 2}{(\cosh(4\beta J) + 3)^2}
+\end{align*}
+
+In a 2D lattice of arbitrary size, the contribution of a spin $s_{i,j}$ to the total energy is 
+$$e_{i,j} = -Js_{i,j}(s_{i+1,j} + s_{i-1,j} + s_{i,j+1} + s_{i,j-1})$$
+Flipping the spin $s_{ij}$ is the same as multiplying $e_{i,j}$ by $-1$. This means that the spin flip results in an energy change equal to 
+\begin{align*}
+    \Delta E &= (-e_{i,j}) - e_{i,j} \\ 
+    &= 2Js_{i,j}(s_{i+1,j} + s_{i-1,j} + s_{i,j+1} + s_{i,j-1})
+\end{align*}
+The value of $\Delta E$ then depends on the spin $s_{i,j}$, and the neighboring spins.  \\
+If all the neighboring spins have the same sign, we get $\Delta E = 8J$ or $\Delta E = -8J$. \\
+If one of the signs differ from the others, we get $\Delta E = 4J$ or $\Delta E = -4J$. \\
+If two spins are positive and two are negative, we get $\Delta E = 0$.  \\
+This means that $\Delta E$ only has 5 possible values,
+$$
+    \Delta E \in \qty{-8J, -4J, 0, 4J, 8J}
+$$ 
+We can use this result to avoid repeatedly calling the exponential function in our code by precomputing the Boltzmann factor $e^{-\beta \Delta E}$
+for the five possible values, and then creating a map from energy change to Boltzmann factor. We can then look up values in that map when we want
+to find the Boltzmann factor.
+
+\end{document}
