@@ -4,11 +4,12 @@ import matplotlib.pyplot as plt
 def plot_T(T):
     eps, _ = np.loadtxt(f"problem6/data-T{T}.dat").T
 
+    min_delta = 0.01
     mine, maxe = np.min(eps), np.max(eps)
-    bins = int((maxe - mine) / 0.01)
+    bins = int((maxe - mine) / min_delta)
 
     plt.figure(tight_layout=True)
-    plt.hist(eps-0.005, bins, density=True)
+    plt.hist(eps - (min_delta/2), bins, density=True)
     plt.axvline(np.mean(eps), color="k", label="mean")
     plt.axvline(np.mean(eps) + np.std(eps), color="k", linestyle="--", label="std")
     plt.axvline(np.mean(eps) - np.std(eps), color="k", linestyle="--")

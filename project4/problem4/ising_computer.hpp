@@ -11,8 +11,6 @@
 struct IsingState
 {
     std::vector<int8_t> spins;
-    uint32_t L;
-    double T;
     int32_t E = 0;
     int32_t M = 0;
 };
@@ -25,7 +23,8 @@ enum class InitialState
     UNORDERED,
 };
 
-std::pair<IsingState, ExpMap> createState(uint32_t L, double T, std::mt19937 &generator, InitialState initialState = InitialState::UNORDERED)
+template <uint32_t L>
+std::pair<IsingState, ExpMap> createState(double T, std::mt19937 &generator, InitialState initialState = InitialState::UNORDERED)
 {
     ExpMap expMap;
     for (int dE = -8; dE <= 8; dE += 4)
@@ -35,11 +34,7 @@ std::pair<IsingState, ExpMap> createState(uint32_t L, double T, std::mt19937 &ge
 
     std::uniform_int_distribution<int> uniform(0, 1);
 
-    IsingState state{
-        .spins = {},
-        .L = L,
-        .T = T,
-    };
+    IsingState state;
     state.spins.resize(L * L);
 
     for (size_t i = 0; i < L; i++)
@@ -88,21 +83,22 @@ std::pair<IsingState, ExpMap> createState(uint32_t L, double T, std::mt19937 &ge
     return {state, expMap};
 }
 
+template <uint32_t L>
 void modifyStateMCMC(IsingState &state, const ExpMap &expMap, std::mt19937 &generator)
 {
-    std::uniform_int_distribution<int> idxDist(0, state.L - 1);
+    std::uniform_int_distribution<int> idxDist(0, L - 1);
     int xidx = idxDist(generator);
     int yidx = idxDist(generator);
 
-    int8_t flippedSpin = state.spins[yidx * state.L + xidx];
+    int8_t flippedSpin = state.spins[yidx * L + xidx];
 
     int8_t dM = -2 * flippedSpin;
     int8_t dE = 0;
-    if (state.L > 2)
+    if (L > 2)
     {
-        dE = 2 * flippedSpin * (state.spins[yidx * state.L + ((xidx + 1) % state.L)] + state.spins[yidx * state.L + ((state.L + xidx - 1) % state.L)] + state.spins[((yidx + 1) % state.L) * state.L + xidx] + state.spins[((state.L + yidx - 1) % state.L) * state.L + xidx]);
+        dE = 2 * flippedSpin * (state.spins[yidx * L + ((xidx + 1) % L)] + state.spins[yidx * L + ((L + xidx - 1) % L)] + state.spins[((yidx + 1) % L) * L + xidx] + state.spins[((L + yidx - 1) % L) * L + xidx]);
     }
-    else if (state.L == 2)
+    else if (L == 2)
     {
         if ((xidx == 0 && yidx == 0) || (xidx == 1 && yidx == 1))
         {
@@ -123,20 +119,21 @@ void modifyStateMCMC(IsingState &state, const ExpMap &expMap, std::mt19937 &gene
     std::uniform_real_distribution<double> probDist(0, 1);
     if (probDist(generator) <= stateChangeProb)
     {
-        state.spins[yidx * state.L + xidx] = -state.spins[yidx * state.L + xidx];
+        state.spins[yidx * L + xidx] = -state.spins[yidx * L + xidx];
         state.E += dE;
         state.M += dM;
     }
 }
 
+template <uint32_t L>
 std::pair<double, double> sampleDistribution(IsingState &state, const ExpMap &expMap, std::mt19937 &generator)
 {
-    size_t n = state.L * state.L;
+    size_t n = L * L;
 
     // do one Monte Carlo cycle
     for (size_t i = 0; i < n; i++)
     {
-        modifyStateMCMC(state, expMap, generator);
+        modifyStateMCMC<L>(state, expMap, generator);
     }
 
     double eps = state.E / static_cast<double>(n);
@@ -145,28 +142,30 @@ std::pair<double, double> sampleDistribution(IsingState &state, const ExpMap &ex
     return {eps, absm};
 }
 
-void sampleToFile(uint32_t L, double T, uint32_t nCycles, std::ofstream &file, std::mt19937 &generator, InitialState initialState = InitialState::UNORDERED, uint32_t burnSamples = 0)
+template <uint32_t L>
+void sampleToFile(double T, uint32_t nCycles, std::ofstream &file, std::mt19937 &generator, InitialState initialState = InitialState::UNORDERED, uint32_t burnSamples = 0)
 {
-    auto [state, expMap] = createState(L, T, generator, initialState);
+    auto [state, expMap] = createState<L>(T, generator, initialState);
     for (size_t i = 0; i < burnSamples; i++)
     {
-        sampleDistribution(state, expMap, generator);
+        sampleDistribution<L>(state, expMap, generator);
     }
 
     for (size_t i = 0; i < nCycles - burnSamples; i++)
     {
-        auto [eps, absm] = sampleDistribution(state, expMap, generator);
+        auto [eps, absm] = sampleDistribution<L>(state, expMap, generator);
         file << eps << " " << absm << "\n";
     }
 }
 
+template <uint32_t L>
 std::tuple<double, double, double, double> calcQtys(
-    uint32_t L, double T, uint32_t nCycles, std::mt19937 &generator, InitialState initialState = InitialState::UNORDERED, uint32_t burnSamples = 0)
+    double T, uint32_t nCycles, std::mt19937 &generator, InitialState initialState = InitialState::UNORDERED, uint32_t burnSamples = 0)
 {
-    auto [state, expMap] = createState(L, T, generator, initialState);
+    auto [state, expMap] = createState<L>(T, generator, initialState);
     for (size_t i = 0; i < burnSamples; i++)
     {
-        sampleDistribution(state, expMap, generator);
+        sampleDistribution<L>(state, expMap, generator);
     }
 
     double totEps = 0;
@@ -177,7 +176,7 @@ std::tuple<double, double, double, double> calcQtys(
 
     for (size_t i = 0; i < nCycles - burnSamples; i++)
     {
-        auto [eps, absm] = sampleDistribution(state, expMap, generator);
+        auto [eps, absm] = sampleDistribution<L>(state, expMap, generator);
         totEps += eps;
         totEps2 += eps * eps;
 

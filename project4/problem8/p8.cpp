@@ -5,7 +5,8 @@
 #include <fstream>
 #include <omp.h>
 
-void doCalc(uint32_t L, size_t nTs)
+template <uint32_t L>
+void doCalc(size_t nTs)
 {
     auto Tray = linspace(2.1, 2.4, nTs);
 
@@ -45,7 +46,7 @@ void doCalc(uint32_t L, size_t nTs)
                 fflush(stdout);
             }
 
-            auto [avgEps, avgAbsm, Cv, X] = calcQtys(L, Tray[j], cycles, generator, InitialState::UNORDERED, 2000);
+            auto [avgEps, avgAbsm, Cv, X] = calcQtys<L>(Tray[j], cycles, generator, InitialState::UNORDERED, 2000);
             epsRay[j] = avgEps;
             absmRay[j] = avgAbsm;
             CvRay[j] = Cv;
@@ -65,11 +66,13 @@ void doCalc(uint32_t L, size_t nTs)
 
 int main()
 {
-    std::array Lvals{40, 60, 80, 100};
-    for (auto &L : Lvals)
-    {
-        doCalc(L, 80);
-    }
+    const size_t nTs = 80;
+
+    // is there a better way of doing this?
+    doCalc<40>(nTs);
+    doCalc<60>(nTs);
+    doCalc<80>(nTs);
+    doCalc<100>(nTs);
 
     return 0;
 }

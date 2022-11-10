@@ -12,17 +12,17 @@ int main()
     std::ofstream outfile;
     outfile.precision(14);
 
-    size_t cycles = 10000;
+    size_t cycles = 800000;
 
     outfile.open("problem6/data-T1.dat");
     Timer timer;
-    sampleToFile(20, 1, cycles, outfile, generator, InitialState::UNORDERED, 300);
+    sampleToFile<20>(1, cycles, outfile, generator, InitialState::UNORDERED, 1000);
     std::cout << timer.get_pretty() << std::endl;
     outfile.close();
 
     outfile.open("problem6/data-T2.4.dat");
     timer.restart();
-    sampleToFile(20, 2.4, cycles, outfile, generator, InitialState::UNORDERED, 300);
+    sampleToFile<20>(2.4, cycles, outfile, generator, InitialState::UNORDERED, 1000);
     std::cout << timer.get_pretty() << std::endl;
     outfile.close();
 

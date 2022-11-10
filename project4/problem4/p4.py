@@ -69,8 +69,7 @@ plt.clf()
 
 # rel diff plot
 
-# plt.plot([1, idx[-1]], [10, 10], "k--", label="10 %")
-plt.axhline(10, *limits, color="k", linestyle="dashed")
+plt.axhline(1, *limits, color="k", linestyle="dashed", label="1 %")
 plt.axhline(0, color="k", linewidth=1)
 plt.plot(idx, abs((cum_eps - avg_eps(1)) / avg_eps(1)) * 100, color=colors[0], label="$\\epsilon$")
 plt.plot(idx, abs((cum_absm - avg_absm(1)) / avg_absm(1)) * 100, color=colors[1], label="$|m|$")

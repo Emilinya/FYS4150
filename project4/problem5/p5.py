@@ -14,7 +14,7 @@ def plot_T(T):
     cum_absm_u = np.cumsum(absm_u)/idx
 
     plt.figure(tight_layout=True)
-    plt.axvline(300, color="k", linestyle="--")
+    plt.axvline(1000, color="k", linestyle="--")
     plt.plot(idx, cum_eps_o, label="$\\left<\\epsilon\\right>$ ordered")
     plt.plot(idx, cum_eps_u, label="$\\left<\\epsilon\\right>$ unordered")
     plt.plot(idx, cum_absm_o, label="$\\left<|m|\\right>$ ordered")
