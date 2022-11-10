@@ -25,17 +25,13 @@ enum class InitialState
     UNORDERED,
 };
 
-std::pair<IsingState, ExpMap> createState(uint32_t L, double T, InitialState initialState = InitialState::UNORDERED)
+std::pair<IsingState, ExpMap> createState(uint32_t L, double T, std::mt19937 &generator, InitialState initialState = InitialState::UNORDERED)
 {
     ExpMap expMap;
     for (int dE = -8; dE <= 8; dE += 4)
     {
         expMap.insert({dE, exp(-dE / T)});
     }
-
-    unsigned int seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::mt19937 generator;
-    generator.seed(seed);
 
     std::uniform_int_distribution<int> uniform(0, 1);
 
@@ -92,12 +88,8 @@ std::pair<IsingState, ExpMap> createState(uint32_t L, double T, InitialState ini
     return {state, expMap};
 }
 
-void modifyStateMCMC(IsingState &state, const std::map<int8_t, double> &expMap)
+void modifyStateMCMC(IsingState &state, const ExpMap &expMap, std::mt19937 &generator)
 {
-    unsigned int seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::mt19937 generator;
-    generator.seed(seed);
-
     std::uniform_int_distribution<int> idxDist(0, state.L - 1);
     int xidx = idxDist(generator);
     int yidx = idxDist(generator);
@@ -137,14 +129,14 @@ void modifyStateMCMC(IsingState &state, const std::map<int8_t, double> &expMap)
     }
 }
 
-std::pair<double, double> sampleDistribution(IsingState &state, const ExpMap expMap)
+std::pair<double, double> sampleDistribution(IsingState &state, const ExpMap &expMap, std::mt19937 &generator)
 {
     size_t n = state.L * state.L;
 
     // do one Monte Carlo cycle
     for (size_t i = 0; i < n; i++)
     {
-        modifyStateMCMC(state, expMap);
+        modifyStateMCMC(state, expMap, generator);
     }
 
     double eps = state.E / static_cast<double>(n);
@@ -153,28 +145,28 @@ std::pair<double, double> sampleDistribution(IsingState &state, const ExpMap exp
     return {eps, absm};
 }
 
-void sampleToFile(uint32_t L, double T, uint32_t nCycles, std::ofstream &file, InitialState initialState = InitialState::UNORDERED, uint32_t burnSamples = 0)
+void sampleToFile(uint32_t L, double T, uint32_t nCycles, std::ofstream &file, std::mt19937 &generator, InitialState initialState = InitialState::UNORDERED, uint32_t burnSamples = 0)
 {
-    auto [state, expMap] = createState(L, T, initialState);
+    auto [state, expMap] = createState(L, T, generator, initialState);
     for (size_t i = 0; i < burnSamples; i++)
     {
-        sampleDistribution(state, expMap);
+        sampleDistribution(state, expMap, generator);
     }
 
     for (size_t i = 0; i < nCycles - burnSamples; i++)
     {
-        auto [eps, absm] = sampleDistribution(state, expMap);
+        auto [eps, absm] = sampleDistribution(state, expMap, generator);
         file << eps << " " << absm << "\n";
     }
 }
 
 std::tuple<double, double, double, double> calcQtys(
-    uint32_t L, double T, uint32_t nCycles, InitialState initialState = InitialState::UNORDERED, uint32_t burnSamples = 0)
+    uint32_t L, double T, uint32_t nCycles, std::mt19937 &generator, InitialState initialState = InitialState::UNORDERED, uint32_t burnSamples = 0)
 {
-    auto [state, expMap] = createState(L, T, initialState);
+    auto [state, expMap] = createState(L, T, generator, initialState);
     for (size_t i = 0; i < burnSamples; i++)
     {
-        sampleDistribution(state, expMap);
+        sampleDistribution(state, expMap, generator);
     }
 
     double totEps = 0;
@@ -185,7 +177,7 @@ std::tuple<double, double, double, double> calcQtys(
 
     for (size_t i = 0; i < nCycles - burnSamples; i++)
     {
-        auto [eps, absm] = sampleDistribution(state, expMap);
+        auto [eps, absm] = sampleDistribution(state, expMap, generator);
         totEps += eps;
         totEps2 += eps * eps;
 
