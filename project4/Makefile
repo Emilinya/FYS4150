@@ -13,7 +13,7 @@ problem4/.p4_cpp.stamp: ./problem4/p4
 	./problem4/p4;
 	touch $@
 problem4/p4: problem4/p4.cpp ../cpp_utils/utils.hpp project4Utils.hpp problem4/ising_computer.hpp
-	g++ -Wall -Wextra -std=c++17  -o $@ $< -larmadillo
+	g++ -Wall -Wextra -std=c++17  -o $@ $< 
 
 
 .PHONY: p4_py
@@ -33,7 +33,7 @@ problem5/.p5_cpp.stamp: ./problem5/p5
 	./problem5/p5;
 	touch $@
 problem5/p5: problem5/p5.cpp ../cpp_utils/utils.hpp project4Utils.hpp problem4/ising_computer.hpp
-	g++ -Wall -Wextra -std=c++17 -O3 -o $@ $< -larmadillo
+	g++ -Wall -Wextra -std=c++17 -O3 -o $@ $< 
 
 
 .PHONY: p5_py
@@ -53,7 +53,7 @@ problem6/.p6_cpp.stamp: ./problem6/p6
 	./problem6/p6;
 	touch $@
 problem6/p6: problem6/p6.cpp ../cpp_utils/utils.hpp project4Utils.hpp problem4/ising_computer.hpp
-	g++ -Wall -Wextra -std=c++17 -O3 -o $@ $< -larmadillo
+	g++ -Wall -Wextra -std=c++17 -O3 -o $@ $< 
 
 
 .PHONY: p6_py
@@ -73,7 +73,7 @@ problem8/.p8_cpp.stamp: ./problem8/p8
 	./problem8/p8;
 	touch $@
 problem8/p8: problem8/p8.cpp ../cpp_utils/utils.hpp project4Utils.hpp problem4/ising_computer.hpp
-	g++ -Wall -Wextra -std=c++17 -O3 -o $@ $< -fopenmp -larmadillo
+	g++ -Wall -Wextra -std=c++17 -O3 -o $@ $< -fopenmp
 
 
 .PHONY: p8_py

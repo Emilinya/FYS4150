@@ -3,27 +3,24 @@
 problem_dict = {
     4: ("cpp", {
         "plot": True,
-        "largs": "-larmadillo",
         "depends": ["project4Utils", "problem4/ising_computer"]
     }),
     5: ("cpp", {
         "plot": True,
         "cargs": "-O3",
-        "largs": "-larmadillo",
         "depends": ["project4Utils", "problem4/ising_computer"],
         "datafiles": ["problem5/data-T1-ordered.dat"],
     }),
     6: ("cpp", {
         "plot": True,
         "cargs": "-O3",
-        "largs": "-larmadillo",
         "depends": ["project4Utils", "problem4/ising_computer"],
         "datafiles": ["problem6/data-T1.dat"],
     }),
     8: ("cpp", {
         "plot": True,
         "cargs": "-O3",
-        "largs": "-fopenmp -larmadillo",
+        "largs": "-fopenmp",
         "depends": ["project4Utils", "problem4/ising_computer"],
         "datafiles": ["problem8/data-L40.dat"],
     }),
