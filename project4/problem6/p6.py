@@ -15,10 +15,11 @@ def plot_T(T):
     plt.axvline(np.mean(eps) - np.std(eps), color="k", linestyle="--")
     plt.xlabel("$\\epsilon$")
     plt.ylabel(f"$p_{{\\epsilon}}(\\epsilon; {T})$")
-    plt.title(f"histograms of generated $\\epsilon$ samples, L=20, T={T}")
     plt.legend()
     plt.savefig(f"imgs/p6_T={T}.svg")
     plt.clf()
+
+plt.rcParams['font.size'] = '14'
 
 plot_T(1)
 plot_T(2.4)

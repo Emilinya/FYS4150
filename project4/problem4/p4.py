@@ -45,6 +45,7 @@ comp(cum_eps[-1], cum_Cv[-1], cum_absm[-1], cum_Xi[-1], T)
 
 # value plot
 
+plt.rcParams['font.size'] = '14'
 colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
 limits = (0.0435, 1 - 0.0435)
 plt.figure(tight_layout=True)

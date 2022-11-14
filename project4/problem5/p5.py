@@ -26,5 +26,7 @@ def plot_T(T):
     plt.savefig(f"imgs/p5_T={T}.svg")
     plt.clf()
 
+plt.rcParams['font.size'] = '14'
+
 plot_T(1)
 plot_T(2.4)

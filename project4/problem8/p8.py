@@ -118,7 +118,7 @@ def get_critical_Ts(datas: list[Data], top_ranges):
 
     plt.xlim(2.15, 2.4)
     plt.ylim(0.9, 2.5)
-    plt.ylabel(f"$C_V$ []")
+    plt.ylabel(f"$C_V$ [$k_B$]")
     plt.xlabel("T [$J/k_B$]")
     plt.legend()
     plt.savefig(f"imgs/p8_Cv.svg")
@@ -154,7 +154,9 @@ def getInfinicrit(L_ray, critical_T_ray):
 
     plt.figure(tight_layout=True)
     plt.plot(L_ray, a + infinicrit*L_ray, "k--", label="linfit")
-    plt.plot(L_ray, L_ray*critical_T_ray, ".", label="$LT_c(L)$")
+    plt.plot(L_ray, L_ray*critical_T_ray, ".", label="data")
+    plt.xlabel("L []")
+    plt.ylabel(f"$LT_c(L)$ [$J/k_B$]")
 
     plt.legend()
     plt.savefig(f"imgs/p8_infinicrit.svg")
@@ -162,6 +164,8 @@ def getInfinicrit(L_ray, critical_T_ray):
     return infinicrit, linfit_err
 
 if __name__ == "__main__":
+    plt.rcParams['font.size'] = '14'
+
     Ls = [40, 60, 80, 100]
     datas = get_datas(Ls)
 
@@ -174,7 +178,7 @@ if __name__ == "__main__":
 
     infinicrit, linfit_err = getInfinicrit(np.array(Ls), np.array(critical_Ts))
 
-    true_infinicrit = 2.269
+    true_infinicrit = 2/np.log(1 + np.sqrt(2))
     print(f"Tc(L=∞) = {infinicrit:.5f} ± {linfit_err:.5f}")
     print(f"Tc(L=∞) = {true_infinicrit}")
     print(f"abs err = {abs(infinicrit - true_infinicrit):.5f}")
