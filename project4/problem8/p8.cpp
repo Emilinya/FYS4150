@@ -20,8 +20,8 @@ void doCalc(size_t nTs)
     Xray.resize(nTs);
 
     Timer timer;
-    size_t repeats = 8;
-    size_t cycles = 160000;
+    size_t repeats = 16;
+    size_t cycles = 320000;
     std::cout << " --- L=" << L << " --- " << std::endl;
 
     std::ofstream outfile;
@@ -66,7 +66,7 @@ void doCalc(size_t nTs)
 
 int main()
 {
-    const size_t nTs = 80;
+    const size_t nTs = 160;
 
     // is there a better way of doing this?
     doCalc<40>(nTs);
