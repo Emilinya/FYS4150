@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import numpy as np
 import matplotlib.pyplot as plt
 from dataclasses import dataclass
@@ -45,7 +47,7 @@ def plot_w_std(xs: np.ndarray, quantity: Quantity, label: str, color, alpha=0.4)
         xs, quantity.mean - quantity.std, quantity.mean + quantity.std,
         color=color, alpha=alpha, edgecolor=color
     )
-    plt.plot(xs, quantity.mean, ".-", color=color, label=label)
+    plt.plot(xs, quantity.mean, ".-", color=color, label=label, markersize=4)
 
 
 def get_datas(Ls: list[int]) -> list[Data]:
@@ -145,6 +147,20 @@ def plot_Ls(datas: list[Data], critical_Ts):
         plt.ylim(-1.88, 160)
         plt.savefig(f"imgs/p8_L={data.L}_X.svg")
 
+
+def getInfinicrit(L_ray, critical_T_ray):
+    (infinicrit, a), covariance = np.polyfit(L_ray, L_ray*critical_T_ray, 1, cov=True)
+    linfit_err, _ = np.sqrt(np.diag(covariance))
+
+    plt.figure(tight_layout=True)
+    plt.plot(L_ray, a + infinicrit*L_ray, "k--", label="linfit")
+    plt.plot(L_ray, L_ray*critical_T_ray, ".", label="$LT_c(L)$")
+
+    plt.legend()
+    plt.savefig(f"imgs/p8_infinicrit.svg")
+
+    return infinicrit, linfit_err
+
 if __name__ == "__main__":
     Ls = [40, 60, 80, 100]
     datas = get_datas(Ls)
@@ -153,6 +169,13 @@ if __name__ == "__main__":
     approx_top_Ts = [2.289, 2.283, 2.279, 2.276]
     top_ranges = [(top-r, top+r) for top in approx_top_Ts]
     critical_Ts = get_critical_Ts(datas, top_ranges)
-    print(critical_Ts)
 
     plot_Ls(datas, critical_Ts)
+
+    infinicrit, linfit_err = getInfinicrit(np.array(Ls), np.array(critical_Ts))
+
+    true_infinicrit = 2.269
+    print(f"Tc(L=∞) = {infinicrit:.5f} ± {linfit_err:.5f}")
+    print(f"Tc(L=∞) = {true_infinicrit}")
+    print(f"abs err = {abs(infinicrit - true_infinicrit):.5f}")
+    print(f"rel err = {abs(infinicrit - true_infinicrit)/true_infinicrit*100:.5f} %")
