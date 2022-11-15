@@ -83,7 +83,17 @@ def get_datas(Ls: list[int]) -> list[Data]:
     return datas
 
 
-def get_critical_Ts(datas: list[Data], top_ranges):
+def get_critical_Ts(datas: list[Data]):
+    def refine_topT(Ts, Cvs, topT_guess, top_points):
+        r = int((top_points-1)/2)
+        top_idx = np.argmax(Ts > topT_guess)
+
+        c, b, _ = np.polyfit(Ts[top_idx-r:top_idx+r], Cvs[top_idx-r:top_idx+r], 2)
+
+        # analytical maximum of the polynomial approximation
+        return -b/(2*c)
+
+
     plt.figure(tight_layout=True)
     colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
@@ -92,21 +102,29 @@ def get_critical_Ts(datas: list[Data], top_ranges):
     top_Ts_list = []
     poly_approxs = []
 
-    for data, top_range, color in zip(datas, top_ranges, colors):
-        top_start = np.argmax(data.Ts > top_range[0])
-        top_end = np.argmax(data.Ts > top_range[1])
+    for data, color in zip(datas, colors):
+        # I tried several r values, 11 is the one that results in the best Tc(L=∞)
+        r = 11
 
-        top_Ts = data.Ts[top_start:top_end]
-        c, b, a = np.polyfit(top_Ts, data.Cv.mean[top_start:top_end], 2)
-        poly_approx = a + b*top_Ts + c*top_Ts**2
+        # initial guess: teperature with largest Cv
+        critical_T = data.Ts[np.argmax(data.Cv.mean)]
 
+        # refinement: top of a polynomial approximation
+        critical_T = refine_topT(data.Ts, data.Cv.mean, critical_T, 2*r + 1)
+
+        # perfection: top of new polynomial approximation
+        top_idx = np.argmax(data.Ts > critical_T)
+        top_Ts = data.Ts[top_idx-r:top_idx+r]
         top_Ts_list.append(top_Ts)
-        poly_approxs.append(poly_approx)
 
-        # analytical maximum of the polynomial approximation
+        c, b, a = np.polyfit(top_Ts, data.Cv.mean[top_idx-r:top_idx+r], 2)
         critical_T = -b/(2*c)
+
         critical_temps.append(critical_T)
         critical_Cvs.append(a + b*critical_T + c*critical_T**2)
+
+        poly_approx = a + b*top_Ts + c*top_Ts**2
+        poly_approxs.append(poly_approx)
 
         plot_w_std(data.Ts, data.Cv, label=f"L={data.L}", color=color, alpha=0.1)
 
@@ -144,7 +162,7 @@ def plot_Ls(datas: list[Data], critical_Ts):
 
         plot_w_std(data.Ts, data.X, "$\\chi$", colors[3])
         plt.legend()
-        plt.ylim(-1.88, 160)
+        plt.ylim(-1.88, np.max(data.X.mean)*1.05)
         plt.savefig(f"imgs/p8_L={data.L}_X.svg")
 
 
@@ -154,7 +172,7 @@ def getInfinicrit(L_ray, critical_T_ray):
 
     plt.figure(tight_layout=True)
     plt.plot(L_ray, a + infinicrit*L_ray, "k--", label="linfit")
-    plt.plot(L_ray, L_ray*critical_T_ray, ".", label="data")
+    plt.plot(L_ray, L_ray*critical_T_ray, "o", label="data")
     plt.xlabel("L []")
     plt.ylabel(f"$LT_c(L)$ [$J/k_B$]")
 
@@ -169,11 +187,7 @@ if __name__ == "__main__":
     Ls = [40, 60, 80, 100]
     datas = get_datas(Ls)
 
-    r = 0.02
-    approx_top_Ts = [2.289, 2.283, 2.279, 2.276]
-    top_ranges = [(top-r, top+r) for top in approx_top_Ts]
-    critical_Ts = get_critical_Ts(datas, top_ranges)
-
+    critical_Ts = get_critical_Ts(datas)
     plot_Ls(datas, critical_Ts)
 
     infinicrit, linfit_err = getInfinicrit(np.array(Ls), np.array(critical_Ts))
