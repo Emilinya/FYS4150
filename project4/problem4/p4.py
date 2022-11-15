@@ -21,7 +21,7 @@ def ana_X(T):
 
 def comp(eps, Cv, absm, X, T):
     def print_comp(name, num, ana):
-        return print(f"{name:^4} | {f'{num:.3f}':>7} | {f'{ana:.3f}':>7}  | {f'{abs((num - ana)/ana)*100:.2f}':>5} %")
+        return print(f"{name:^4} | {f'{num:.4f}':>7} | {f'{ana:.4f}':>7}  | {f'{abs((num - ana)/ana)*100:.2f}':>5} %")
 
     print("name | numeric | analytic | rel diff")
     print_comp("ε", eps, avg_eps(T))
