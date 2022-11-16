@@ -1,0 +1,23 @@
+1000 cycles, 8 T values, CPU with 4 cores, 8 threads
+sequential:        11m10.615s
+parallel:          1m46.721s
+fixed stupid code: 0m2.201s  // I created a new generator each time I wanted a random number ...
+
+parallel speedup: 6.28x
+stupid speedup:   48.49x
+
+
+3000 cycles, 32 T values, CPU with 4 cores, 8 threads, no stupid code
+sequential: 2m18.630
+parallel:   0m26.540s
+template L: 0m24.041s
+
+parallel speedup: 5.22
+template speedup: 1.10x
+
+
+3000 cycles, 80 T values, CPU with 20 cores, 40 threads, no stupid code, and templating
+sequential: 5m56.859s
+parallel:   0m15.308s
+
+parallel speedup: 23.31x
