@@ -1,9 +1,23 @@
 # This is a meta-makefile
 
 problem_dict = {
-	"test": ("cpp", {
+	"problem2": ("cpp", {
+		"plot": False,
+		"largs": "-larmadillo",
+		"depends": ["include/crank_nicolson_ititializer"]
+	}),
+	"problem4": ("cpp", {
 		"plot": True,
-		"depends": []
+		"largs": "-larmadillo",
+		"depends": ["include/schrodinger_intiializer"],
+		"datafile": "problem7/u.bin",
+	}),
+	"problem7": ("cpp", {
+		"plot": True,
+		"cargs": "-O3",
+		"largs": "-larmadillo",
+		"depends": ["include/crank_nicolson_ititializer", "include/schrodinger_intiializer", "include/schrodinger_solver"],
+		"datafile": "problem7/wall_us.bin",
 	}),
 }
 
@@ -14,10 +28,10 @@ def cpp_string(name, deps, cargs, largs, data_path):
 {name}_data: {data_path}
 
 {data_path}: ./src/{name}/output/data.out
-	./src/{name}/output/data.out;
+	./src/{name}/output/data.out
 src/{name}/output/data.out: src/{name}/data.cpp ../cpp_utils/utils.hpp {' '.join([dep + '.hpp' for dep in deps])}
 	@mkdir -p src/{name}/output
-	g++ -Wall -Wextra -std=c++17 {cargs} -o $@ $< {largs}
+	$(CXX) -Wall -Wextra -std=c++17 {cargs} -o $@ $< {largs}
 """
 
 
@@ -70,12 +84,12 @@ all: {' '.join(problem_dict.keys())}
 			))
 
 	makefile.write("""
-DIR_NAME ?= "0"
+DIR_NAME ?= ""
 
-.PHONY: init
-init:
-	@if [ $(DIR_NAME) != "0" ]; then\\
-		echo "Initializing directory $(DIR_NAME)";\\
+.PHONY: init_dir
+init_dir:
+	@if [ $(DIR_NAME) != "" ]; then\\
+		echo "Initializing $(DIR_NAME)";\\
 		mkdir -p imgs/$(DIR_NAME);\\
 		mkdir -p src/$(DIR_NAME)/output;\\
 		touch src/$(DIR_NAME)/data.cpp;\\
@@ -84,7 +98,8 @@ init:
 
 .PHONY: clean_dir
 clean_dir:
-	@if [ $(DIR_NAME) != "0" ]; then\\
+	@if [ $(DIR_NAME) != "" ]; then\\
+		echo "Cleaning up $(DIR_NAME)";\\
 		rm -rf src/$(DIR_NAME)/output;\\
 		rm -rf imgs/$(DIR_NAME);\\
 	fi
