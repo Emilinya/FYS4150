@@ -1,23 +1,21 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-N = 4
 T = 1
 
 def avg_eps(T):
-    return 4*np.sinh(-4/T)/(np.cosh(4/T) + 3) / N
+    return np.sinh(-4/T)/(np.cosh(4/T) + 3)
 
 def avg_absm(T):
-    return 2*(np.exp(4/T) + 2)/(np.cosh(4/T) + 3) / N
+    return 0.5*(np.exp(4/T) + 2)/(np.cosh(4/T) + 3)
 def avg_absm2(T):
-    return 8*(np.exp(4/T) + 1)/(np.cosh(4/T) + 3) / (N**2)
+    return 0.5*(np.exp(4/T) + 1)/(np.cosh(4/T) + 3)
 
 def ana_Cv(T):
-    return (16 / T**2) * (1 + 3*np.cosh(4/T)) / ((np.cosh(4/T) + 3)**2) / N
+    return (4 / T**2) * (1 + 3*np.cosh(4/T)) / ((np.cosh(4/T) + 3)**2)
 
 def ana_X(T):
-    return N * (avg_absm2(T) - avg_absm(T)**2) / T
-    # return (4 / T) * (3*np.exp(4/T) + np.exp(-4/T) + 2) / ((np.cosh(4/T) + 3)**2) / N
+    return (1 / T) * (3*np.exp(4/T) + np.exp(-4/T) + 3) / ((np.cosh(4/T) + 3)**2)
 
 def comp(eps, Cv, absm, X, T):
     def print_comp(name, num, ana):
@@ -36,10 +34,10 @@ eps, absm = np.loadtxt("problem4/data.dat").T
 idx = np.arange(1, len(eps)+1)
 
 cum_eps = np.cumsum(eps)/idx
-cum_Cv = N * ((np.cumsum(eps**2)/idx) - cum_eps**2) / (T**2)
+cum_Cv = 4 * ((np.cumsum(eps**2)/idx) - cum_eps**2) / (T**2)
 
 cum_absm = np.cumsum(absm)/idx
-cum_Xi = N * ((np.cumsum(absm**2)/idx) - cum_absm**2) / T
+cum_Xi = 4 * ((np.cumsum(absm**2)/idx) - cum_absm**2) / T
 
 comp(cum_eps[-1], cum_Cv[-1], cum_absm[-1], cum_Xi[-1], T)
 

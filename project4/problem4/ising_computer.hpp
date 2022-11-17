@@ -23,6 +23,7 @@ enum class InitialState
     UNORDERED,
 };
 
+// create initial state from temperature and initial state type
 template <uint32_t L>
 std::pair<IsingState, ExpMap> createState(double T, std::mt19937 &generator, InitialState initialState = InitialState::UNORDERED)
 {
@@ -43,6 +44,7 @@ std::pair<IsingState, ExpMap> createState(double T, std::mt19937 &generator, Ini
         {
             if (initialState == InitialState::UNORDERED)
             {
+                // v is 0 or 1, so we must transform to -1 or 1
                 int v = uniform(generator);
                 state.spins[i * L + j] = -(1 - v) + v;
             }
@@ -51,12 +53,14 @@ std::pair<IsingState, ExpMap> createState(double T, std::mt19937 &generator, Ini
                 state.spins[i * L + j] = 1;
             }
 
+            // assertion just in case
             assert(state.spins[i * L + j] == 1 || state.spins[i * L + j] == -1);
         }
     }
 
     if (L == 1)
     {
+        // this case does not make much sense, return somewhat reasonable values
         state.M = state.spins[0];
         state.E = 0;
         return {state, expMap};
@@ -74,7 +78,9 @@ std::pair<IsingState, ExpMap> createState(double T, std::mt19937 &generator, Ini
     {
         for (size_t j = 0; j < L; j++)
         {
+            // sum of spin below and spin to the right
             int8_t dr_spins = state.spins[i * L + (j + 1) % L] + state.spins[((i + 1) % L) * L + j];
+
             state.E += -state.spins[i * L + j] * dr_spins;
             state.M += state.spins[i * L + j];
         }
@@ -83,6 +89,7 @@ std::pair<IsingState, ExpMap> createState(double T, std::mt19937 &generator, Ini
     return {state, expMap};
 }
 
+// modify state using a Monte Carlo Markov chain approach
 template <uint32_t L>
 void modifyStateMCMC(IsingState &state, const ExpMap &expMap, std::mt19937 &generator)
 {
@@ -96,6 +103,8 @@ void modifyStateMCMC(IsingState &state, const ExpMap &expMap, std::mt19937 &gene
     int8_t dE = 0;
     if (L > 2)
     {
+        // must do (L + idx - 1) % L instead of (idx - 1) % L, because the mod
+        // operator handles negative numbers poorly
         dE = 2 * flippedSpin * (state.spins[yidx * L + ((xidx + 1) % L)] + state.spins[yidx * L + ((L + xidx - 1) % L)] + state.spins[((yidx + 1) % L) * L + xidx] + state.spins[((L + yidx - 1) % L) * L + xidx]);
     }
     else if (L == 2)
@@ -125,6 +134,7 @@ void modifyStateMCMC(IsingState &state, const ExpMap &expMap, std::mt19937 &gene
     }
 }
 
+// get epsilon and |m| after one Monte Carlo cycle
 template <uint32_t L>
 std::pair<double, double> sampleDistribution(IsingState &state, const ExpMap &expMap, std::mt19937 &generator)
 {
@@ -142,6 +152,7 @@ std::pair<double, double> sampleDistribution(IsingState &state, const ExpMap &ex
     return {eps, absm};
 }
 
+// save epsilon and |m| values to a file
 template <uint32_t L>
 void sampleToFile(double T, uint32_t nCycles, std::ofstream &file, std::mt19937 &generator, InitialState initialState = InitialState::UNORDERED, uint32_t burnSamples = 0)
 {
@@ -158,11 +169,13 @@ void sampleToFile(double T, uint32_t nCycles, std::ofstream &file, std::mt19937 
     }
 }
 
+// calculate statistical quantities <epslilon>, <|m|>, Cv, and X
 template <uint32_t L>
 std::tuple<double, double, double, double> calcQtys(
     double T, uint32_t nCycles, std::mt19937 &generator, InitialState initialState = InitialState::UNORDERED, uint32_t burnSamples = 0)
 {
     auto [state, expMap] = createState<L>(T, generator, initialState);
+
     for (size_t i = 0; i < burnSamples; i++)
     {
         sampleDistribution<L>(state, expMap, generator);
@@ -181,7 +194,7 @@ std::tuple<double, double, double, double> calcQtys(
         totEps2 += eps * eps;
 
         totAbsm += absm;
-        totAbsm2 += absm*absm;
+        totAbsm2 += absm * absm;
     }
 
     double avgEps = totEps / static_cast<double>(nCycles - burnSamples);
