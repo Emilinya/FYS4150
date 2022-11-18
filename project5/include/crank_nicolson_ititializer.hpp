@@ -31,12 +31,17 @@ std::pair<arma::sp_cx_mat, arma::sp_cx_mat> martix_generator(arma::cx_double r, 
     arma::sp_cx_mat A = arma::sp_cx_mat(n, n);
     arma::sp_cx_mat B = arma::sp_cx_mat(n, n);
 
+    size_t M = sqrt(n) + 2;
+    if ((M-2)*(M-2) != n) {
+        throw std::invalid_argument("martix_generator: length of a must be a square number");
+    }
+
     for (size_t i = 0; i < n; i++)
     {
         A(i, i) = a(i);
         B(i, i) = b(i);
 
-        if (i % 3 != 2 && i != n-1) {
+        if (i % (M-2) != 2 && i != n-1) {
             A(i, i+1) = -r;
             A(i+1, i) = -r;
 
@@ -44,12 +49,12 @@ std::pair<arma::sp_cx_mat, arma::sp_cx_mat> martix_generator(arma::cx_double r, 
             B(i+1, i) = r;
         }
 
-        if (n >= 3 && i < n-3) {
-            A(i, i+3) = -r;
-            A(i+3, i) = -r;
+        if (n >= (M-2) && i < n-(M-2)) {
+            A(i, i+(M-2)) = -r;
+            A(i+(M-2), i) = -r;
 
-            B(i, i+3) = r;
-            B(i+3, i) = r;
+            B(i, i+(M-2)) = r;
+            B(i+(M-2), i) = r;
         }
     }
 
@@ -75,8 +80,8 @@ std::pair<arma::sp_cx_mat, arma::sp_cx_mat> initialize_matricies(size_t M, doubl
 
     for (size_t k = 0; k < n; k++)
     {
-        size_t i = 1 + k % (M-2);
-        size_t j = 1 + k / (M-2);
+        size_t i = 1 + k / (M-2);
+        size_t j = 1 + k % (M-2);
 
         a(k) = 1. + 4.*r + cx_i * dt * V(i, j) / 2.;
         b(k) = 1. - 4.*r - cx_i * dt * V(i, j) / 2.;
