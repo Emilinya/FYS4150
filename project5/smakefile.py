@@ -10,7 +10,7 @@ problem_dict = {
 		"plot": True,
 		"largs": "-larmadillo",
 		"depends": ["include/schrodinger_intiializer"],
-		"datafile": "problem7/u.bin",
+		"datafile": "problem4/u.bin",
 	}),
 	"problem7": ("cpp", {
 		"plot": True,
@@ -18,6 +18,13 @@ problem_dict = {
 		"largs": "-larmadillo",
 		"depends": ["include/crank_nicolson_ititializer", "include/schrodinger_intiializer", "include/schrodinger_solver"],
 		"datafile": "problem7/wall_us.bin",
+	}),
+	"problem8": ("cpp", {
+		"plot": True,
+		"cargs": "-O3",
+		"largs": "-larmadillo",
+		"depends": ["include/crank_nicolson_ititializer", "include/schrodinger_intiializer", "include/schrodinger_solver"],
+		"datafile": "problem8/us.bin",
 	}),
 }
 

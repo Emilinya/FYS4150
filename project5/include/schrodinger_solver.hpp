@@ -38,6 +38,11 @@ void simulate(
     }
     print("\r100/100 %");
 
-    ts.save(string_format("%s_ts.bin", dataPath.c_str()));
-    us.save(string_format("%s_us.bin", dataPath.c_str()));
+    if (dataPath.back() != '/') {
+        dataPath += "_";
+    } 
+
+    ts.save(string_format("%sts.bin", dataPath.c_str()));
+    us.save(string_format("%sus.bin", dataPath.c_str()));
+    V.save(string_format("%sV.bin", dataPath.c_str()));
 }
