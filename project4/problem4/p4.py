@@ -19,12 +19,12 @@ def ana_X(T):
 
 def comp(eps, Cv, absm, X, T):
     def print_comp(name, num, ana):
-        return print(f"{name:^4} | {f'{num:.4f}':>7} | {f'{ana:.4f}':>7}  | {f'{abs((num - ana)/ana)*100:.2f}':>5} %")
+        return print(f"{name:^5} | {f'{num:.4f}':>7} | {f'{ana:.4f}':>7}  | {f'{abs((num - ana)/ana)*100:.2f}':>5} %")
 
-    print("name | numeric | analytic | rel diff")
-    print_comp("ε", eps, avg_eps(T))
+    print(" name | numeric | analytic | rel diff")
+    print_comp("<ε>", eps, avg_eps(T))
     print_comp("Cv", Cv, ana_Cv(T))
-    print_comp("|m|", absm, avg_absm(T))
+    print_comp("<|m|>", absm, avg_absm(T))
     print_comp("χ", X, ana_X(T))
 
 eps, absm = np.loadtxt("problem4/data.dat").T
@@ -48,10 +48,10 @@ colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
 limits = (0.0435, 1 - 0.0435)
 plt.figure(tight_layout=True)
 
-plt.plot(idx, cum_eps, color=colors[0], label="$\\epsilon$")
+plt.plot(idx, cum_eps, color=colors[0], label="$\\left<\\epsilon\\right>$")
 plt.axhline(avg_eps(1), *limits, color=colors[0], linestyle="--")
 
-plt.plot(idx, cum_absm, color=colors[1], label="$|m|$")
+plt.plot(idx, cum_absm, color=colors[1], label="$\\left<|m|\\right>$")
 plt.axhline(avg_absm(1), *limits, color=colors[1], linestyle="--")
 
 plt.plot(idx, cum_Cv, color=colors[2], label="$C_V$")
@@ -70,8 +70,8 @@ plt.clf()
 
 plt.axhline(1, *limits, color="k", linestyle="dashed", label="1 %")
 plt.axhline(0, color="k", linewidth=1)
-plt.plot(idx, abs((cum_eps - avg_eps(1)) / avg_eps(1)) * 100, color=colors[0], label="$\\epsilon$")
-plt.plot(idx, abs((cum_absm - avg_absm(1)) / avg_absm(1)) * 100, color=colors[1], label="$|m|$")
+plt.plot(idx, abs((cum_eps - avg_eps(1)) / avg_eps(1)) * 100, color=colors[0], label="$\\left<\\epsilon\\right>$")
+plt.plot(idx, abs((cum_absm - avg_absm(1)) / avg_absm(1)) * 100, color=colors[1], label="$\\left<|m|\\right>$")
 plt.plot(idx, abs((cum_Cv - ana_Cv(1)) / ana_Cv(1)) * 100, color=colors[2], label="$C_V$")
 plt.plot(idx, abs((cum_Xi - ana_X(1)) / ana_X(1)) * 100, color=colors[3], label="$\\chi$")
 plt.ylim(-2, 100)
