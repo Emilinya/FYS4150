@@ -49,6 +49,23 @@ std::vector<double> from_func(std::vector<double> &x_vec, double (*f)(double))
     return vec;
 }
 
+#define rprint(stuff) std::cerr << "\r" << stuff << "          "
+
+inline void print() {
+    std::cerr << '\n';
+}
+
+template<typename T>
+inline void print(T arg) {
+    std::cerr << arg << '\n';
+}
+
+template<typename T, typename... Rest>
+inline void print(T arg, Rest... rest) {
+    std::cerr << arg << ' ';
+    print(rest...);
+}
+
 // string formatting from https://stackoverflow.com/questions/2342162/stdstring-formatting-like-sprintf
 template <typename... Args>
 std::string string_format(const std::string &format, Args... args)

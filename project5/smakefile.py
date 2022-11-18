@@ -26,6 +26,13 @@ problem_dict = {
 		"depends": ["include/crank_nicolson_ititializer", "include/schrodinger_intiializer", "include/schrodinger_solver"],
 		"datafile": "problem8/us.bin",
 	}),
+	"problem9": ("cpp", {
+		"plot": True,
+		"cargs": "-O3",
+		"largs": "-larmadillo",
+		"depends": ["include/crank_nicolson_ititializer", "include/schrodinger_intiializer", "include/schrodinger_solver"],
+		"datafile": "problem9/us.bin",
+	}),
 }
 
 
