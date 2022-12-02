@@ -31,7 +31,7 @@ problem_dict = {
 		"cargs": "-O3",
 		"largs": "-larmadillo",
 		"depends": ["include/crank_nicolson_ititializer", "include/schrodinger_intiializer", "include/schrodinger_solver"],
-		"datafile": "problem9/us.bin",
+		"datafile": "problem9/1slit_us.bin",
 	}),
 }
 

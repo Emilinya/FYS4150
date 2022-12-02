@@ -19,5 +19,6 @@ def plot_prob_diviation(name):
     plt.ylabel("$1-\\sum_{ij}p_{ij}$ []")
     plt.savefig(f"imgs/problem7/probdiff_{name}.svg")
 
+plt.rcParams['font.size'] = '14'
 plot_prob_diviation("no_wall")
 plot_prob_diviation("wall")

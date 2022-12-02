@@ -7,6 +7,7 @@ from armautils import arma_load
 
 u = arma_load("src/problem4/output/u.bin", isComplex=True)
 
+plt.rcParams['font.size'] = '14'
 plt.figure(tight_layout=True)
 plt.imshow(np.abs(u)**2, extent=[0, 1, 0, 1])
 plt.xlabel("x []")

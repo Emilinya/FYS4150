@@ -86,9 +86,9 @@ src/problem8/output/.plot.stamp: src/problem8/plot.py src/problem8/output/us.bin
 problem9: problem9_data problem9_plot
 
 .PHONY: problem9_data
-problem9_data: src/problem9/output/us.bin
+problem9_data: src/problem9/output/1slit_us.bin
 
-src/problem9/output/us.bin: ./src/problem9/output/data.out
+src/problem9/output/1slit_us.bin: ./src/problem9/output/data.out
 	./src/problem9/output/data.out
 src/problem9/output/data.out: src/problem9/data.cpp ../cpp_utils/utils.hpp include/crank_nicolson_ititializer.hpp include/schrodinger_intiializer.hpp include/schrodinger_solver.hpp
 	@mkdir -p src/problem9/output
@@ -98,7 +98,7 @@ src/problem9/output/data.out: src/problem9/data.cpp ../cpp_utils/utils.hpp inclu
 .PHONY: problem9_plot
 problem9_plot: src/problem9/output/.plot.stamp
 
-src/problem9/output/.plot.stamp: src/problem9/plot.py src/problem9/output/us.bin
+src/problem9/output/.plot.stamp: src/problem9/plot.py src/problem9/output/1slit_us.bin
 	@mkdir -p imgs/problem9
 	python3 src/problem9/plot.py
 	@touch $@
