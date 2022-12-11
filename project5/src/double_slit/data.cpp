@@ -5,7 +5,7 @@ int main()
 {
     Timer timer;
     simulate(
-        "src/problem8/output/", 0.005, 2.5e-5, 0.002, 1e10,
+        "src/double_slit/output/", 0.005, 2.5e-5, 0.002, 1e10,
         {0.25, 0.05, 200}, {0.5, 0.20, 0}, {0.5, 0.02, 2, 0.05, 0.05}
     );
     print(timer.get_pretty());

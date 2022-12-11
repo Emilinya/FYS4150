@@ -8,11 +8,11 @@ from armautils import arma_load
 
 def get_data(n_slits):
     if n_slits == 1:
-        data_dir = "src/problem9/output/1slit_"
+        data_dir = "src/triple_slit/output/1slit_"
     elif n_slits == 2:
-        data_dir = "src/problem8/output/"
+        data_dir = "src/double_slit/output/"
     elif n_slits == 3:
-        data_dir = "src/problem9/output/3slits_"
+        data_dir = "src/triple_slit/output/3slits_"
     else:
         print(f"unsuported slit count: {n_slits}")
         exit(1)
@@ -44,14 +44,14 @@ def plot_prob(n_slits):
     plt.plot(np.linspace(0, 1, M), p_detector*100)
     plt.xlabel("y []")
     plt.ylabel("$p(y\,|\,x=0.8\,;\,t=0.002)$ [%]")
-    plt.savefig(f"imgs/problem9/detect_{n_slits}_slits.svg")
+    plt.savefig(f"imgs/triple_slit/detect_{n_slits}_slits.svg")
     plt.clf()
 
 def anim(n_slits):
     U_grids, t_ray, V_grid = get_data(n_slits)
     V_grid[np.where(V_grid == 0)] = np.nan
 
-    animate(t_ray, np.abs(U_grids)**2, V_grid, f"imgs/problem9/prob_anim_{n_slits}.mp4")
+    animate(t_ray, np.abs(U_grids)**2, V_grid, f"imgs/triple_slit/prob_anim_{n_slits}.mp4")
 
 anim(1)
 anim(3)

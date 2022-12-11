@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # simple script to convert svgs to pdfs that can be used with latex
-FILES="./imgs/problem4/*.svg ./imgs/problem7/*.svg ./imgs/problem8/*.svg ./imgs/problem9/*.svg"
+FILES="./imgs/schrodinger_intiializer_test/*.svg ./imgs/schrodinger_solver_test/*.svg ./imgs/double_slit/*.svg ./imgs/triple_slit/*.svg"
 for f in $FILES
 do
     echo "Processing $f..."

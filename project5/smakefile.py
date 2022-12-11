@@ -1,37 +1,37 @@
 # This is a meta-makefile
 
 problem_dict = {
-	"problem2": ("cpp", {
+	"crank_nicolson_ititializer_test": ("cpp", {
 		"plot": False,
 		"largs": "-larmadillo",
 		"depends": ["include/crank_nicolson_ititializer"]
 	}),
-	"problem4": ("cpp", {
+	"schrodinger_intiializer_test": ("cpp", {
 		"plot": True,
 		"largs": "-larmadillo",
 		"depends": ["include/schrodinger_intiializer"],
-		"datafile": "problem4/u.bin",
+		"datafile": "schrodinger_intiializer_test/u.bin",
 	}),
-	"problem7": ("cpp", {
+	"schrodinger_solver_test": ("cpp", {
 		"plot": True,
 		"cargs": "-O3",
 		"largs": "-larmadillo",
 		"depends": ["include/crank_nicolson_ititializer", "include/schrodinger_intiializer", "include/schrodinger_solver"],
-		"datafile": "problem7/wall_us.bin",
+		"datafile": "schrodinger_solver_test/wall_us.bin",
 	}),
-	"problem8": ("cpp", {
+	"double_slit": ("cpp", {
 		"plot": True,
 		"cargs": "-O3",
 		"largs": "-larmadillo",
 		"depends": ["include/crank_nicolson_ititializer", "include/schrodinger_intiializer", "include/schrodinger_solver"],
-		"datafile": "problem8/us.bin",
+		"datafile": "double_slit/us.bin",
 	}),
-	"problem9": ("cpp", {
+	"triple_slit": ("cpp", {
 		"plot": True,
 		"cargs": "-O3",
 		"largs": "-larmadillo",
 		"depends": ["include/crank_nicolson_ititializer", "include/schrodinger_intiializer", "include/schrodinger_solver"],
-		"datafile": "problem9/1slit_us.bin",
+		"datafile": "triple_slit/1slit_us.bin",
 	}),
 }
 
