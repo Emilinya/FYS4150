@@ -24,6 +24,7 @@ animate(t_ray, np.abs(U_grids)**2, V_grid, "imgs/double_slit/prob_anim.mp4")
 for frac in [0, 0.5, 1]:
     idx = int(frac*(N-1))
 
+    # plot Re(U)
     plt.rcParams['font.size'] = '18'
     plt.figure(tight_layout=True)
     plt.imshow(np.real(U_grids[idx]), extent=[0, 1, 0, 1])
@@ -36,6 +37,7 @@ for frac in [0, 0.5, 1]:
     plt.savefig(f"imgs/double_slit/real_t={t_ray[idx]:.1g}.svg")
     plt.clf()
 
+    # plot Im(U)
     plt.imshow(np.imag(U_grids[idx]), extent=[0, 1, 0, 1])
     plt.xlabel("x []")
     plt.ylabel("y []")
@@ -46,6 +48,7 @@ for frac in [0, 0.5, 1]:
     plt.savefig(f"imgs/double_slit/imag_t={t_ray[idx]:.1g}.svg")
     plt.clf()
 
+    # plot |U|^2
     plt.imshow(np.abs(U_grids[idx])**2, extent=[0, 1, 0, 1])
     plt.xlabel("x []")
     plt.ylabel("y []")

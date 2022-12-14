@@ -6,6 +6,7 @@ sys.path.insert(1, 'include')
 from aniutils import animate
 from armautils import arma_load
 
+
 def get_data(n_slits):
     if n_slits == 1:
         data_dir = "src/triple_slit/output/1slit_"
@@ -31,6 +32,7 @@ def get_data(n_slits):
 
     return U_grids, t_ray, V_grid
 
+
 def plot_prob(n_slits):
     U_grids, _, _ = get_data(n_slits)
     M = U_grids.shape[1]
@@ -47,11 +49,16 @@ def plot_prob(n_slits):
     plt.savefig(f"imgs/triple_slit/detect_{n_slits}_slits.svg")
     plt.clf()
 
+
 def anim(n_slits):
     U_grids, t_ray, V_grid = get_data(n_slits)
     V_grid[np.where(V_grid == 0)] = np.nan
 
-    animate(t_ray, np.abs(U_grids)**2, V_grid, f"imgs/triple_slit/prob_anim_{n_slits}.mp4")
+    animate(
+        t_ray, np.abs(U_grids)**2, V_grid,
+        f"imgs/triple_slit/prob_anim_{n_slits}.mp4"
+    )
+
 
 anim(1)
 anim(3)

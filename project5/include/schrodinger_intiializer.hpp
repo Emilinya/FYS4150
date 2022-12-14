@@ -10,7 +10,7 @@ struct PacketData
     double momentum;
 };
 
-// create a normalized Gaussian wave packet
+// Create a normalized Gaussian wave packet
 arma::cx_mat get_initial_state(size_t M, PacketData packetX, PacketData packetY)
 {
     arma::cx_mat u = arma::cx_mat(M, M).fill(0.);
@@ -18,7 +18,7 @@ arma::cx_mat get_initial_state(size_t M, PacketData packetX, PacketData packetY)
 
     arma::cx_double cx_i = arma::cx_double(0, 1);
 
-    for (size_t iy = 1; iy < M-1; iy++)
+    for (size_t iy = 1; iy < M - 1; iy++)
     {
         double y = h * iy;
         double centered_y = y - packetY.center;
@@ -26,7 +26,7 @@ arma::cx_mat get_initial_state(size_t M, PacketData packetX, PacketData packetY)
         arma::cx_double yTerm2 = cx_i * packetY.momentum * centered_y;
         arma::cx_double yTerm = yTerm1 + yTerm2;
 
-        for (size_t ix = 1; ix < M-1; ix++)
+        for (size_t ix = 1; ix < M - 1; ix++)
         {
             double x = h * ix;
             double centered_x = x - packetX.center;
@@ -60,6 +60,7 @@ struct WallData
     double slitSeparation;
 };
 
+// Create a potentiall barrier
 arma::mat get_potential(size_t M, double v0, WallData wallData)
 {
     arma::mat V = arma::mat(M, M).fill(0);
@@ -92,11 +93,13 @@ arma::mat get_potential(size_t M, double v0, WallData wallData)
             for (size_t xi = pos_left; xi < pos_right; xi++)
             {
                 V(yi, xi) = 0;
-                V(M-(yi-1), xi) = 0;
+                V(M - (yi - 1), xi) = 0;
             }
         }
         startIdx -= apetureIdxs / 2 + separationIdxs;
-    } else {
+    }
+    else
+    {
         startIdx -= separationIdxs / 2;
     }
 
@@ -107,11 +110,12 @@ arma::mat get_potential(size_t M, double v0, WallData wallData)
             for (size_t xi = pos_left; xi < pos_right; xi++)
             {
                 V(yi, xi) = 0;
-                V(M-(yi-1), xi) = 0;
+                V(M - (yi - 1), xi) = 0;
             }
         }
 
-        if (startIdx < apetureIdxs + separationIdxs) {
+        if (startIdx < apetureIdxs + separationIdxs)
+        {
             break;
         }
         startIdx -= apetureIdxs + separationIdxs;

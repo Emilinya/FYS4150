@@ -1,7 +1,10 @@
 import numpy as np
 import pyarma as pa
 
+
 def arma_load(filename, isComplex=False):
+    """Simple utility function to remove some arma boilerplate."""
+
     if isComplex:
         mat = pa.cx_mat()
     else:
